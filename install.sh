@@ -23,6 +23,7 @@ cd $WORKSPACE
 python3 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip
+pip install --upgrade awscli
 cd $WORKSPACE/$FUNCTIONNAME
 npm init -y
 npm install --update aws-sam-local
@@ -50,3 +51,8 @@ cd $WORKSPACE/$FUNCTIONNAME
 
 mv temp_1212.json package.json
 cp $CONFIGFOLDER/other-config/tslint.json $WORKSPACE/
+
+## TEST
+cd $WORKSPACE/$FUNCTIONNAME
+tsc
+npm run sam
