@@ -2,7 +2,7 @@
 # Change these
 # vvvvvvvvvvvvvvvvvvvvvvvv
 ROOTFOLDER=~/src
-PROJECT=project-six
+PROJECT=project-one
 FUNCTIONNAME=function-one
 # ^^^^^^^^^^^^^^^^^^^^^^^^
 
