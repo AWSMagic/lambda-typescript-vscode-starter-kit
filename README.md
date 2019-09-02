@@ -2,7 +2,7 @@
 
 Lambda Starter Kit for TypeScript, AWS SAM and VSCode
 
-In order to use this starter kit first:
+In order to use Lambda Starter Kit first:
 
 - Install and Run Docker
 - Install Node.js
