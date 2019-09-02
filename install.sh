@@ -1,21 +1,52 @@
-##
-# Change these
-# vvvvvvvvvvvvvvvvvvvvvvvv
-ROOTFOLDER=~/src
-PROJECT=project-one
-FUNCTIONNAME=function-one
-# ^^^^^^^^^^^^^^^^^^^^^^^^
+while getopts "r:p:f:hc:" option 
+do
+  case "${option}" in
+    r) ROOTFOLDER=${OPTARG};;
+    p) PROJECTNAME=${OPTARG};;
+    f) FUNCTIONNAME=${OPTARG};;
+    c) CONFIGFOLDER=${OPTARG};;
+    h) 
+      echo "Usage:"
+      echo "$0 -w {root folder} -p {project name} -f {function name}"
+      echo "Example: The command below will create '~/src/project-one/function-one' folder structure"
+      echo "$0 -r ~/src -p project-one -f function-one"
+      exit 0;;
+    \?)
+      echo "help: $0 -h"
+      exit 1;;
+    :)
+      echo "Invalid option: $OPTARG requires an argument"
+      exit 1;;
+  esac
+done
 
-### DONT CHANGE ANYTHING BELOW #####
-####################################
+if [ -z ${CONFIGFOLDER+x} ];
+then
+  CONFIGFOLDER=`pwd`;
+else
+  echo set;
+fi
 
-CONFIGFOLDER=`pwd`
-WORKSPACE=$ROOTFOLDER/$PROJECT
+WORKSPACE=$ROOTFOLDER/$PROJECTNAME
 
-echo $PROJECT
-echo $WORKSPACE
-echo $FUNCTIONNAME
-echo $CONFIGFOLDER
+echo "Captured these as requirements:"
+echo "root folder: $ROOTFOLDER"
+echo "project name: $PROJECTNAME"
+echo "function name: $FUNCTIONNAME"
+echo "workspace folder: $WORKSPACE"
+echo "configuration folder (pwd): $CONFIGFOLDER"
+echo ""
+
+while true; do
+  read -p "Do you want to continue? (y/n) " yn
+  case $yn in
+      [Yy]* ) break;;
+      [Nn]* ) echo "Aborted"; exit;;
+      * ) echo "Please answer yes or no.";;
+  esac
+done
+
+echo "Installing"
 
 mkdir -p $WORKSPACE/$FUNCTIONNAME
 cd $WORKSPACE
