@@ -7,7 +7,7 @@ do
     c) CONFIGFOLDER=${OPTARG};;
     h) 
       echo "Usage:"
-      echo "$0 -w {root folder} -p {project name} -f {function name}"
+      echo "$0 -r {root folder} -p {project name} -f {function name}"
       echo "Example: The command below will create '~/src/project-one/function-one' folder structure"
       echo "$0 -r ~/src -p project-one -f function-one"
       exit 0;;

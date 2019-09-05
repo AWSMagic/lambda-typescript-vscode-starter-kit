@@ -1,0 +1,3 @@
+improvements:
+  [ ] rename  `install.sh` to `lsk` (lambda starter kit)
+  [ ] create similar script for windows
