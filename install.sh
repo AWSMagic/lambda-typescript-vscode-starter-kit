@@ -73,11 +73,18 @@ cd $WORKSPACE
 curl -L https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64 -o jq
 chmod 755 jq
 cd $WORKSPACE/$FUNCTIONNAME
+
+sed "s/function-name/$FUNCTIONNAME/g" template.yaml  > temp_template.yaml
+mv temp_template.yaml template.yaml
+
+export nSAM="node_modules/aws-sam-local/node_modules/.bin/sam local invoke -e src/event.json $FUNCTIONNAME"
+export nDEBUG="node_modules/aws-sam-local/node_modules/.bin/sam local invoke -e src/event.json --debug-port 9999 $FUNCTIONNAME"
+
 ../jq '.scripts = {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "sam": "node_modules/aws-sam-local/node_modules/.bin/sam local invoke -e src/event.json function-one",
-    "debug": "node_modules/aws-sam-local/node_modules/.bin/sam local invoke -e src/event.json --debug-port 9999 function-one"
+    "build": "/node_modules/typescript/bin/tsc",
+    "sam": env.nSAM,
+    "debug": env.nDEBUG
   }' package.json > temp_1212.json
 
 mv temp_1212.json package.json
@@ -85,6 +92,33 @@ cp $CONFIGFOLDER/other-config/tslint.json $WORKSPACE/
 
 echo "Removing jq"
 rm -rf ../jq
+
+cd $WORKSPACE/.vscode
+
+cat > temp_launch.json << EOF
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Lambda $FUNCTIONNAME",
+      "type": "node",
+      "request": "attach",
+      "sourceMaps": true,
+      "address": "localhost",
+      "port": 9999,
+      "localRoot": "\${workspaceRoot}/$FUNCTIONNAME",
+      "remoteRoot": "/var/task",
+      "protocol": "inspector",
+      "stopOnEntry": false,
+      "outFiles": [
+        "\${workspaceFolder}/$FUNCTIONNAME/dist/**/*.js"
+      ]
+    }
+  ]
+}
+EOF
+
+mv temp_launch.json launch.json
 
 ## TEST
 cd $WORKSPACE/$FUNCTIONNAME
