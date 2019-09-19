@@ -83,6 +83,9 @@ cd $WORKSPACE/$FUNCTIONNAME
 mv temp_1212.json package.json
 cp $CONFIGFOLDER/other-config/tslint.json $WORKSPACE/
 
+echo "Removing jq"
+rm -rf ../jq
+
 ## TEST
 cd $WORKSPACE/$FUNCTIONNAME
 tsc
