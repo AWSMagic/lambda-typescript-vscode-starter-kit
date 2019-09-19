@@ -5,7 +5,7 @@ Parameters:
     IdentityNameParameter: 
       Type: String
 Resources:
-  function-one:
+  function-name:
     Type: 'AWS::Serverless::Function'
     Properties:
       Handler: dist/index.handler
