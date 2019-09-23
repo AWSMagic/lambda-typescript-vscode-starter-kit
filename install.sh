@@ -127,7 +127,7 @@ Resources:
     Type: 'AWS::Serverless::Function'
     Properties:
       Handler: dist/index.handler
-      Runtime: nodejs8.10
+      Runtime: nodejs10.x
       CodeUri: .
       Description: A starter AWS Lambda function.
       MemorySize: 128
