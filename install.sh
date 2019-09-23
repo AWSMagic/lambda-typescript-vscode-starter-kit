@@ -122,9 +122,6 @@ cat > template.yaml << EOF
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: A starter AWS Lambda function.
-Parameters: 
-    IdentityNameParameter: 
-      Type: String
 Resources:
   $FUNCTIONNAME:
     Type: 'AWS::Serverless::Function'
@@ -138,6 +135,13 @@ Resources:
       Environment:
         Variables:
           Stage: DEV
+Outputs:
+  ${FUNCTIONNAME}Arn:
+    Description: "${FUNCTIONNAME} Lambda Function ARN"
+    Value: !GetAtt ${FUNCTIONNAME}.Arn
+  ${FUNCTIONNAME}RoleArn:
+    Description: "${FUNCTIONNAME} Lambda Function Role"
+    Value: !GetAtt ${FUNCTIONNAME}Role.Arn
 EOF
 
 cat > tsconfig.json << EOF
