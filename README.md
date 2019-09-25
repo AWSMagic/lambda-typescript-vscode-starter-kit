@@ -21,5 +21,5 @@ This starter kit has a script named `install.sh` which expects three attributes.
 Sample Usage:
 
 ```bash
-$ ./intsall.sh -r ~/src -p project-one -f function-one
+$ ./intsall.sh -r ~/src -p projectOne -f functionOne
 ```
