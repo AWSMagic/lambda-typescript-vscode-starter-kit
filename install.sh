@@ -1,15 +1,17 @@
-while getopts "r:p:f:hc:" option 
+while getopts "r:a:f:b:p:hc:" option 
 do
   case "${option}" in
     r) ROOTFOLDER=${OPTARG};;
-    p) PROJECTNAME=${OPTARG};;
+    a) APPNAME=${OPTARG};;
     f) FUNCTIONNAME=${OPTARG};;
+    b) BUCKETNAME=${OPTARG};;
+    p) PROFILENAME=${OPTARG};;
     c) CONFIGFOLDER=${OPTARG};;
     h) 
       echo "Usage:"
-      echo "$0 -r {root folder} -p {project name} -f {function name}"
+      echo "$0 -r {root folder} -a {app name} -f {function name} -b {S3 bucket name} -p {aws cli profile name}"
       echo "Example: The command below will create '~/src/project-one/function-one' folder structure"
-      echo "$0 -r ~/src -p project-one -f function-one"
+      echo "$0 -r ~/src -a appOne -f functionOne -b ozlambdabucket -p lambdadev"
       exit 0;;
     \?)
       echo "help: $0 -h"
@@ -33,12 +35,15 @@ if [[ "$FUNCTIONNAME" =~ [^a-zA-Z0-9] ]]; then
   exit 1
 fi
 
-WORKSPACE=$ROOTFOLDER/$PROJECTNAME
+WORKSPACE=$ROOTFOLDER/$APPNAME
+STACKNAME=${FUNCTIONNAME}-stack
 
 echo "Captured these as requirements:"
 echo "root folder: $ROOTFOLDER"
-echo "project name: $PROJECTNAME"
+echo "application name: $APPNAME"
 echo "function name: $FUNCTIONNAME"
+echo "S3 bucket name: $BUCKETNAME"
+echo "AWS CLI profile name: $PROFILENAME"
 echo "workspace folder: $WORKSPACE"
 echo "configuration folder (pwd): $CONFIGFOLDER"
 echo ""
@@ -173,18 +178,23 @@ cat > tsconfig.json << EOF
 }
 EOF
 
-export nBUILD="npm run transpile; source ../.venv/bin/activate; sam build"
 export nINVOKE="source ../.venv/bin/activate; sam local invoke -e src/event.json $FUNCTIONNAME"
-export nAPI="source ../.venv/bin/activate; sam local start-api"
 export nDEBUG="source ../.venv/bin/activate; sam local invoke -e src/event.json --debug-port 9999 $FUNCTIONNAME"
+export nPACKAGE="source ../.venv/bin/activate; sam package --output-template packaged.yaml --s3-bucket $BUCKETNAME --profile $PROFILENAME"
+export nDEPLOY="source ../.venv/bin/activate; sam deploy --template-file packaged.yaml --region us-east-1 --capabilities CAPABILITY_IAM --stack-name $STACKNAME --profile $PROFILENAME"
+export nDELETE="source ../.venv/bin/activate; aws cloudformation delete-stack --stack-name $STACKNAME"
 
 ../jq '.scripts = {
     "test": "echo \"Error: no test specified\" && exit 1",
     "transpile": "node_modules/typescript/bin/tsc",
-    "build": env.nBUILD,
+    "build": "npm run transpile; source ../.venv/bin/activate; sam build",
     "invoke": env.nINVOKE,
-    "start-api": env.nAPI,
-    "debug": env.nDEBUG
+    "api": "source ../.venv/bin/activate; sam local start-api",
+    "debug": env.nDEBUG,
+    "package": env.nPACKAGE,
+    "deploy": env.nDEPLOY,
+    "one-deploy": "npm run build; npm run package; npm run deploy",
+    "delete-stack": env.nDELETE
   }' package.json > temp_1212.json
 
 mv temp_1212.json package.json

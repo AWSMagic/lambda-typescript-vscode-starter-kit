@@ -16,10 +16,11 @@ This starter kit has a script named `install.sh` which expects three attributes.
 -r: root folder
 -p: project name
 -f: function name
+-b: s3 bucket name, you must create this bucket in advance
 ```
 
 Sample Usage:
 
 ```bash
-$ ./intsall.sh -r ~/src -p projectOne -f functionOne
+$ ./intsall.sh -r ~/src -p projectOne -f functionOne -b ozlambdabucket
 ```
