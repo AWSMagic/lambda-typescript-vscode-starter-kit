@@ -14,13 +14,14 @@ This starter kit has a script named `install.sh` which expects three attributes.
 
 ```
 -r: root folder
--p: project name
+-a: application name
 -f: function name
 -b: s3 bucket name, you must create this bucket in advance
+-p: AWS CLI profile name
 ```
 
 Sample Usage:
 
 ```bash
-$ ./intsall.sh -r ~/src -p projectOne -f functionOne -b ozlambdabucket
+$ ./intsall.sh -r ~/src -a appOne -f functionOne -b ozlambdabucket -p lambdadev
 ```
