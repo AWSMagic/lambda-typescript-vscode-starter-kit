@@ -7,6 +7,7 @@ In order to use Lambda Starter Kit first:
 - Install and Run Docker
 - Install Node.js
 - Install Visual Studio Code
+- Create an S3 bucket
 
 ## About Installer
 
