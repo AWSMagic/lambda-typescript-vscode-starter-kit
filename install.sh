@@ -66,6 +66,7 @@ cd $WORKSPACE/$FUNCTIONNAME
 npm init -y
 npm install --save-dev typescript
 npm install @types/node
+npm install @types/aws-lambda
 alias tsc='"$WORKSPACE"/"$FUNCTIONNAME"/node_modules/typescript/bin/tsc'
 
 mkdir $WORKSPACE/.vscode
@@ -132,6 +133,12 @@ Resources:
       Description: A starter AWS Lambda function.
       MemorySize: 128
       Timeout: 3
+      Events:
+        ${FUNCTIONNAME}Api:
+          Type: Api
+          Properties:
+            Path: /test
+            Method: GET      
       Environment:
         Variables:
           Stage: DEV
@@ -142,6 +149,9 @@ Outputs:
   ${FUNCTIONNAME}RoleArn:
     Description: "${FUNCTIONNAME} Lambda Function Role"
     Value: !GetAtt ${FUNCTIONNAME}Role.Arn
+  ${FUNCTIONNAME}Api:
+    Description: "functionOne API ARN"
+    Value: !Sub "https://\${ServerlessRestApi}.execute-api.\${AWS::Region}.amazonaws.com/Prod/test/"    
 EOF
 
 cat > tsconfig.json << EOF
@@ -156,20 +166,24 @@ cat > tsconfig.json << EOF
       "node_modules/@types"
     ],
     "types": [
-      "node"
+      "node", "aws-lambda"
     ],
     "esModuleInterop": true
   }
 }
 EOF
 
-export nSAM="source ../.venv/bin/activate; sam local invoke -e src/event.json $FUNCTIONNAME"
+export nBUILD="npm run transpile; source ../.venv/bin/activate; sam build"
+export nINVOKE="source ../.venv/bin/activate; sam local invoke -e src/event.json $FUNCTIONNAME"
+export nAPI="source ../.venv/bin/activate; sam local start-api"
 export nDEBUG="source ../.venv/bin/activate; sam local invoke -e src/event.json --debug-port 9999 $FUNCTIONNAME"
 
 ../jq '.scripts = {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node_modules/typescript/bin/tsc",
-    "sam": env.nSAM,
+    "transpile": "node_modules/typescript/bin/tsc",
+    "build": env.nBUILD,
+    "invoke": env.nINVOKE,
+    "start-api": env.nAPI,
     "debug": env.nDEBUG
   }' package.json > temp_1212.json
 
@@ -204,9 +218,8 @@ cat > launch.json << EOF
 }
 EOF
 
-#mv temp_launch.json launch.json
-
 ## TEST
 cd $WORKSPACE/$FUNCTIONNAME
 tsc
-npm run sam
+npm run build
+npm run invoke
