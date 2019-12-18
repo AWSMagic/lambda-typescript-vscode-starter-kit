@@ -84,6 +84,7 @@ cat > settings.json << EOF
   "editor.tabSize": 2,
   "editor.detectIndentation": false,
   "files.exclude": {
+    "**/.aws-sam": true,
     "**/*.js": true,
     "**/*.js.map": true,
     "**/node_modules": true,
