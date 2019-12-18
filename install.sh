@@ -180,7 +180,7 @@ EOF
 
 export nINVOKE="source ../.venv/bin/activate; sam local invoke -e src/event.json $FUNCTIONNAME"
 export nDEBUG="source ../.venv/bin/activate; sam local invoke -e src/event.json --debug-port 9999 $FUNCTIONNAME"
-export nPACKAGE="source ../.venv/bin/activate; sam package --output-template packaged.yaml --s3-bucket $BUCKETNAME --profile $PROFILENAME"
+export nPACKAGE="source ../.venv/bin/activate; sam package --output-template-file packaged.yaml --s3-bucket $BUCKETNAME --profile $PROFILENAME"
 export nDEPLOY="source ../.venv/bin/activate; sam deploy --template-file packaged.yaml --region us-east-1 --capabilities CAPABILITY_IAM --stack-name $STACKNAME --profile $PROFILENAME"
 export nDELETE="source ../.venv/bin/activate; aws cloudformation delete-stack --stack-name $STACKNAME"
 
