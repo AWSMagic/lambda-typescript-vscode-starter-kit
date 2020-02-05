@@ -24,5 +24,5 @@ This starter kit has a script named `install.sh` which expects three attributes.
 Sample Usage:
 
 ```bash
-$ ./intsall.sh -r ~/src -a appOne -f functionOne -b ozlambdabucket -p lambdadev
+$ ./install.sh -r ~/src -a appOne -f functionOne -b ozlambdabucket -p lambdadev
 ```
