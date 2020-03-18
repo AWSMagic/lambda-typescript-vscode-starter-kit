@@ -1,6 +1,9 @@
-# Lambda Starter-Kit for TypeScript with Visual Studio Code
+# Lambda Starter Kit for TypeScript
 
 Lambda Starter Kit for TypeScript, AWS SAM and VSCode
+
+
+__Requirements__
 
 In order to use Lambda Starter Kit first:
 
@@ -9,9 +12,17 @@ In order to use Lambda Starter Kit first:
 - Install Visual Studio Code
 - Create an S3 bucket
 
-## About Installer
+You need an S3 bucket which can be used to hold your build artifacts as part of the SAM deployment.
 
-This starter kit has a script named `install.sh` which expects three attributes.
+Note! Bucket names are globally unique, so be creative.
+
+```bash
+aws s3 mb s3://ozlambdabucket
+```
+
+__Usage__
+
+This starter kit has a script named `install-<platform>.sh` which expects several argument:
 
 ```
 -r: root folder
@@ -21,7 +32,7 @@ This starter kit has a script named `install.sh` which expects three attributes.
 -p: AWS CLI profile name
 ```
 
-Sample Usage:
+__Example__
 
 ```bash
 $ ./install.sh -r ~/src -a appOne -f functionOne -b ozlambdabucket -p lambdadev
