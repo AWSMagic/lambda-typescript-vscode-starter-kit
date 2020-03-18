@@ -35,5 +35,7 @@ This starter kit has a script named `install-<platform>.sh` which expects severa
 __Example__
 
 ```bash
-$ ./install.sh -r ~/src -a appOne -f functionOne -b ozlambdabucket -p lambdadev
+$ ./install-osx.sh -r ~/src -a appOne -f functionOne -b ozlambdabucket -p lambdadev
+or
+$ ./install-cloud9.sh -r ~/src -a appOne -f functionOne -b ozlambdabucket -p lambdadev
 ```
