@@ -21,6 +21,16 @@ This starter kit has a script named `install.sh` which expects three attributes.
 -p: AWS CLI profile name
 ```
 
+Requirements:
+
+You need an S3 bucket which can be used to hold your build artifacts as part of the SAM deployment.
+
+Note! Bucket names are globally unique, so be creative.
+
+```bash
+aws s3 mb s3://ozlambdabucket
+```
+
 Sample Usage:
 
 ```bash
